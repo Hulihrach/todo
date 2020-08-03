@@ -1,0 +1,8 @@
+app/config/local.neon
+
+# Custom configuration files
+.idea/
+
+# Composer dependencies
+vendor/
+composer.lock
