@@ -25,6 +25,7 @@ di:
 services:
 	router: App\Router\RouterFactory::createRouter
 	userManager: App\Model\UserManager
+	todoManager: App\Model\TodoManager
 
 	security.authenticator: App\Security\Authenticator
 

@@ -1,0 +1,76 @@
+{block title}List of TODO lists{/block}
+
+{varType array $lists}
+{block content}
+
+	{include '@header.latte'}
+
+<div class="container mx-auto">
+	<div class="flex flex-col">
+		<div class="my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+			{form createTodoList, class => "ml-auto max-w-sm max-w mb-8"}
+				<div class="flex items-center border-b border-indigo-500 py-2">
+					{input name, autofocus => true, class => "appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"}
+					{input submit, class => "flex-shrink-0 bg-indigo-500 hover:bg-indigo-700 border-indigo-500 hover:border-indigo-700 text-sm border-4 text-white py-1 px-2 rounded"}
+				</div>
+			{/form}
+
+			<div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+				<table class="min-w-full divide-y divide-gray-200">
+					<thead>
+					<tr>
+						<th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+							List name
+						</th>
+						<th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+							Tasks
+						</th>
+						<th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-right text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+							Actions
+						</th>
+					</tr>
+					</thead>
+					<tbody class="bg-white divide-y divide-gray-200">
+					<tr>
+						<td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                            <div class="text-sm leading-5 font-medium text-gray-900">
+                                Jane Cooper
+                            </div>
+						</td>
+						<td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+							<div class="text-sm leading-5 text-gray-900">8 Incomplete</div>
+							<div class="text-sm leading-5 text-gray-500">2 Done</div>
+						</td>
+						<td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+							<a href="#" class="text-red-600 hover:text-red-900 ml-8">Archive</a>
+						</td>
+					</tr>
+
+					<tr>
+						<td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+							<div class="text-sm leading-5 font-medium text-gray-900">
+								Jane Cooper
+							</div>
+						</td>
+						<td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+							<div class="text-sm leading-5 text-gray-900">8 Incomplete</div>
+							<div class="text-sm leading-5 text-gray-500">2 Done</div>
+						</td>
+						<td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+							<a href="#" class="text-red-600 hover:text-red-900 ml-8">Archive</a>
+						</td>
+					</tr>
+
+					{foreach $lists as $list}
+						{control todoList, $list}
+					{/foreach}
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+    </div>
+</div>
+
+
+{/block}

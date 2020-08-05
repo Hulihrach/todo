@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class User
 {
-	use TIdentifier;
+	use TIdentifier,
+		TCreatedAt;
 
 	/**
 	 * @var string
@@ -23,6 +25,12 @@ class User
 	 * @ORM\Column (type="string", nullable=false)
 	 */
 	private $password;
+
+	/**
+	 * @var Collection|TodoList[]
+	 * @ORM\OneToMany(targetEntity="TodoList", mappedBy="user")
+	 */
+	private $todoLists;
 
 	public function __construct(string $email, string $password)
 	{
@@ -48,6 +56,11 @@ class User
 	public function setPassword(string $password): void
 	{
 		$this->password = $password;
+	}
+
+	public function getTodoLists(): ?Collection
+	{
+		return $this->todoLists;
 	}
 
 }

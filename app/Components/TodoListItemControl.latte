@@ -1,0 +1,18 @@
+<tr>
+    {form editTodoListItem, class => "ml-auto max-w-sm max-w mb-8"}
+        {input id, value => $item->getId()}
+
+    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+        <div class="flex items-center border-b border-indigo-500 py-2">
+        {input text, class => "appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none", value => $item->getText()}
+        </div>
+    </td>
+    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+        <div class="text-sm leading-5 text-gray-900">{$item->getCreatedAt()|date:'d. m. Y H:i'}</div>
+    </td>
+    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+        {input submit, class => "flex-shrink-0 bg-indigo-500 hover:bg-indigo-700 border-indigo-500 hover:border-indigo-700 text-sm border-4 text-white py-1 px-2 rounded mx-4 cursor-pointer"}
+        <a n:href="archive $item->getId()" class="text-indigo-600 hover:text-indigo-900">Mark as done</a>
+    </td>
+    {/form}
+</tr>
