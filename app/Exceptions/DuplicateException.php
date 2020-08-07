@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
-class DuplicateException extends \Exception
+use Exception;
+
+class DuplicateException extends Exception
 {
 }

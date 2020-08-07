@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -36,6 +37,7 @@ class User
 	{
 		$this->email = $email;
 		$this->password = $password;
+		$this->createdAt = new DateTime();
 	}
 
 	public function getEmail(): string

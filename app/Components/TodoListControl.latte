@@ -1,16 +1,18 @@
 {varType App\Entities\TodoList $list}
 <tr>
-    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-sm leading-5 font-medium text-gray-900">
-            {$list->getName()}
-        </div>
-    </td>
-    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-        <div class="text-sm leading-5 text-gray-900">{$list->getActiveItems()->count()} Incomplete</div>
-        <div class="text-sm leading-5 text-gray-500">{$list->getInactiveItems()->count()} Done</div>
-    </td>
-    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-        <a href="{plink Todo:detail, $list->getId()}" class="text-indigo-600 hover:text-indigo-900">Show details</a>
-        <a n:href="archive, $list->getId()" class="text-red-600 hover:text-red-900 ml-8">Archive</a>
-    </td>
+	<td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+		<div class="text-sm leading-5 font-medium text-gray-900">
+			{$list->getName()}
+		</div>
+	</td>
+
+	<td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+		<div class="text-sm leading-5 text-gray-900">{$list->getActiveItems()->count()} Incomplete</div>
+		<div class="text-sm leading-5 text-gray-500">{$list->getInactiveItems()->count()} Done</div>
+	</td>
+
+	<td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+		<a href="{plink Todo:detail, $list->getId()}" class="text-indigo-600 hover:text-indigo-900">Show details</a>
+		<a n:href="archive, $list->getId()" class="text-red-600 hover:text-red-900 ml-8">Archive</a>
+	</td>
 </tr>

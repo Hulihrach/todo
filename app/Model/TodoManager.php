@@ -46,17 +46,38 @@ class TodoManager
 	{
 		$user = $this->userRepository->find($userId);
 
-		return $this->todoListRepository->findBy(['user' => $user, 'archived' => false], null, $limit, $offset);
+		return $this->todoListRepository->findBy(['user' => $user, 'archived' => false], ['id' => 'DESC'], $limit, $offset);
 	}
 
 	public function findListTodos(?TodoList $list, int $limit, int $offset): array
 	{
-		return $this->todoListItemRepository->findBy(['list' => $list, 'done' => false], null, $limit, $offset);
+		return $this->todoListItemRepository->findBy(['list' => $list, 'done' => false], ['createdAt' => 'DESC'], $limit, $offset);
 	}
 
-	public function getListTodoCount(int $listId): int
+	/**
+	 * @param int $userId
+	 * @return int
+	 * @throws ORMException
+	 */
+	public function getListsCount(int $userId): int
 	{
-		$list = $this->todoListRepository->find($listId);
+		$user = $this->userRepository->find($userId);
+
+		return $this->todoListRepository->createQueryBuilder('list')
+			->select('COUNT(list)')
+			->where('list.user = :user')
+			->andWhere('list.archived = :archived')
+			->setParameters([':user' => $user, ':archived' => false])
+			->getQuery()->getSingleScalarResult();
+	}
+
+	/**
+	 * @param TodoList $list
+	 * @return int
+	 * @throws ORMException
+	 */
+	public function getListTodoCount(TodoList $list): int
+	{
 		return $this->todoListItemRepository->createQueryBuilder('item')
 			->select('COUNT(item)')
 			->where('item.list = :list')
@@ -66,6 +87,7 @@ class TodoManager
 	}
 
 	/**
+	 * @param int $userId
 	 * @param string $name
 	 * @throws ORMException
 	 */
@@ -113,11 +135,22 @@ class TodoManager
 	}
 
 	/**
+	 * @param TodoListItem $todo
+	 * @throws ORMException
+	 */
+	public function removeTodoListItem(TodoListItem $todo): void
+	{
+		$this->em->remove($todo);
+
+		$this->em->flush();
+	}
+
+	/**
 	 * @param TodoListItem|null $todo
 	 * @param string $text
 	 * @throws ORMException
 	 */
-	public function changeTodoListItemText(?TodoListItem $todo, string $text): void
+	public function changeTodoListItemText(TodoListItem $todo, string $text): void
 	{
 		$todo->setText($text);
 

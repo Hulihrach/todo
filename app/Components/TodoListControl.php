@@ -5,6 +5,7 @@ namespace App\Components;
 use App\Entities\TodoList;
 use App\Model\TodoManager;
 use Doctrine\ORM\ORMException;
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\SmartObject;
 
@@ -20,16 +21,20 @@ class TodoListControl extends Control
 		$this->todoManager = $todoManager;
 	}
 
+	/**
+	 * @param int $id
+	 * @throws AbortException
+	 */
 	public function handleArchive(int $id): void
 	{
 		$list = $this->todoManager->findList($id);
 
 		if (!$list) {
-
+			$this->presenter->redirect('this');
 		}
 
-		if ($list->getUser() !== $this->getPresenter()->getUser()->getId()) {
-
+		if ($list->getUser() !== $this->presenter->getUser()->getId()) {
+			$this->presenter->redirect('default');
 		}
 
 		try {

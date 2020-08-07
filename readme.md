@@ -1,33 +1,27 @@
-Nette Web Project
-=================
+Yet Another TODO List Project
+=============================
 
-This is a simple, skeleton application using the [Nette](https://nette.org). This is meant to
-be used as a starting point for your new projects.
-
-[Nette](https://nette.org) is a popular tool for PHP web development.
-It is designed to be the most usable and friendliest as possible. It focuses
-on security and performance and is definitely one of the safest PHP frameworks.
-
-If you like Nette, **[please make a donation now](https://nette.org/donate)**. Thank you!
-
+This is a simple application using the [Nette](https://nette.org). It is a basic application allowing you to create and manage multiple TODO lists for multiple users. 
 
 Requirements
 ------------
 
-- Web Project for Nette 3.0 requires PHP 7.1
+- PHP 7.1
+- Access to a database
+- Composer installed (see [getcomposer.org](https://getcomposer.org))
 
 
 Installation
 ------------
 
-The best way to install Web Project is using Composer. If you don't have Composer yet,
-download it following [the instructions](https://doc.nette.org/composer). Then use command:
+Use the following simple commands:
 
 	git clone <this-project>
-	cd this-project
+	cd this-project-folder
 	composer install
-	copy config.example to config.local
-	edit config.local accordingly
+	cp app/config/config.example.neon app/config/local.neon
+
+Then, execute the script `db.sql` in your database and edit config file `app/config/local.neon` to match credentials to your database.
 
 
 Make directories `temp/` and `log/` writable.

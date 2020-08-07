@@ -4,6 +4,7 @@ namespace App\Presenters;
 
 use App\Components\TodoListControl;
 use App\Components\TodoListItemControl;
+use App\Entities\TodoList;
 use App\Model\TodoManager;
 use Doctrine\ORM\ORMException;
 use Nette\Application\AbortException;
@@ -12,12 +13,23 @@ use Nette\Utils\Paginator;
 
 class TodoPresenter extends Presenter
 {
+
 	/** @var TodoManager @inject */
 	public $todoManager;
 
-	public function renderDefault(): void
+	public function renderDefault(int $page = 1): void
 	{
-		$this->template->lists = $this->todoManager->findUsersLists($this->getUser()->getId());
+		try {
+			$listsCount = $this->todoManager->getListsCount($this->getUser()->getId());
+		} catch (ORMException $e) {
+			$this->flashMessage('Failed to fetch necessary data from the database', 'red');
+			$listsCount = 0;
+		}
+
+		$paginator = $this->createPaginator($page, $listsCount);
+
+		$this->template->lists = $this->todoManager->findUsersLists($this->getUser()->getId(), $paginator->getLength(), $paginator->getOffset());
+		$this->template->paginator = $paginator;
 	}
 
 	/**
@@ -29,16 +41,18 @@ class TodoPresenter extends Presenter
 	{
 		$list = $this->todoManager->findList($id);
 
-		if (!$list) {
+		if (!$this->checkExistenceAndAccess($list)) {
 			$this->redirect('default');
 		}
 
-		if ($list->getUser()->getId() !== $this->getUser()->getId()) {
-			$this->redirect('default');
+		try {
+			$todosCount = $this->todoManager->getListTodoCount($list);
+		} catch (ORMException $e) {
+			$this->flashMessage('Failed to fetch necessary data from the database', 'red');
+			$todosCount = 0;
 		}
 
-		$todosLength = $list->getActiveItems()->count();
-		$paginator = $this->createPaginator($page, $todosLength);
+		$paginator = $this->createPaginator($page, $todosCount);
 
 		$todos = $this->todoManager->findListTodos($list, $paginator->getLength(), $paginator->getOffset());
 
@@ -69,6 +83,10 @@ class TodoPresenter extends Presenter
 		return $form;
 	}
 
+	/**
+	 * @param Form $form
+	 * @throws AbortException
+	 */
 	public function createTodoList(Form $form): void
 	{
 		$values = $form->getValues();
@@ -106,7 +124,7 @@ class TodoPresenter extends Presenter
 		$listId = (int) $this->getParameter('id');
 		$list = $this->todoManager->findList($listId);
 
-		if (!$list) {
+		if (!$this->checkExistenceAndAccess($list)) {
 			$this->redirect('default');
 		}
 
@@ -129,4 +147,11 @@ class TodoPresenter extends Presenter
 
 		return $paginator;
 	}
+
+	private function checkExistenceAndAccess(?TodoList $list): bool
+	{
+		return $list &&
+			$list->getUser()->getId() === $this->getUser()->getId();
+	}
+
 }

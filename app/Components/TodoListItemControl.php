@@ -36,22 +36,41 @@ class TodoListItemControl extends Control
 	{
 		$todo = $this->todoManager->findItem($id);
 
-		if (!$todo) {
-			$this->redirect('default');
-		}
-
-		if ($todo->getList()->getUser()->getId() !== $this->getPresenter()->getUser()->getId()) {
-			$this->redirect('default');
+		if (!$this->checkExistenceAndAccess($todo)) {
+			$this->presenter->redirect('default');
 		}
 
 		try {
 			$this->todoManager->archiveTodoListItem($todo);
 		} catch (ORMException $e) {
-			$this->getPresenter()->flashMessage('An error occurred when establishing connection to the database', 'red');
+			$this->presenter->flashMessage('An error occurred when establishing connection to the database', 'red');
 			$this->redirect('this');
 		}
 
-		$this->getPresenter()->flashMessage('Task successfully archived', 'green');
+		$this->presenter->flashMessage('Task successfully archived', 'green');
+		$this->redirect('this');
+	}
+
+	/**
+	 * @param int $id
+	 * @throws AbortException
+	 */
+	public function handleRemove(int $id): void
+	{
+		$todo = $this->todoManager->findItem($id);
+
+		if (!$this->checkExistenceAndAccess($todo)) {
+			$this->presenter->redirect('default');
+		}
+
+		try {
+			$this->todoManager->removeTodoListItem($todo);
+		} catch (ORMException $e) {
+			$this->presenter->flashMessage('An error occurred when establishing connection to the database', 'red');
+			$this->redirect('this');
+		}
+
+		$this->presenter->flashMessage('Task successfully removed', 'green');
 		$this->redirect('this');
 	}
 
@@ -79,15 +98,25 @@ class TodoListItemControl extends Control
 
 		$todo = $this->todoManager->findItem((int) $values->id);
 
-		//todo check user, maybe extract to different method
+		if (!$this->checkExistenceAndAccess($todo)) {
+			$this->presenter->redirect('default');
+		}
 
 		try {
 			$this->todoManager->changeTodoListItemText($todo, $values->text);
 		} catch (ORMException $e) {
-
+			$this->presenter->flashMessage('An error occurred when establishing connection to the database', 'red');
+			$this->redirect('this');
 		}
 
-		$this->getPresenter()->flashMessage('TODO item edited', 'green');
+		$this->presenter->flashMessage('TODO item edited', 'green');
 		$this->redirect('this');
 	}
+
+	private function checkExistenceAndAccess(?TodoListItem $todo): bool
+	{
+		return $todo &&
+			$todo->getList()->getUser()->getId() === $this->presenter->getUser()->getId();
+	}
+
 }

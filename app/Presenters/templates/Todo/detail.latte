@@ -1,6 +1,9 @@
 {block title}TODO list detail{/block}
 
+{varType array $todos}
 {varType App\Entities\TodoList $list}
+{varType Nette\Utils\Paginator $paginator}
+
 {block content}
 
 {include '@header.latte'}
@@ -18,7 +21,7 @@
 
 			{form addTask, class => "ml-auto max-w-sm max-w mb-8"}
 				<div class="flex items-center border-b border-indigo-500 py-2">
-					{input text, autofocus => true, class => "appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"}
+					{input text, autofocus => true, value => "", class => "appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"}
 					{input submit, class => "flex-shrink-0 bg-indigo-500 hover:bg-indigo-700 border-indigo-500 hover:border-indigo-700 text-sm border-4 text-white py-1 px-2 rounded"}
 				</div>
 			{/form}
@@ -61,11 +64,11 @@
 						<div>
 							<p class="text-sm leading-5 text-gray-700">
 								Showing
-								<span class="font-medium">1</span>
+								<span class="font-medium">{($paginator->page - 1) * 10 + 1}</span>
 								to
-								<span class="font-medium">10</span>
+								<span class="font-medium">{($paginator->page * 10) > $paginator->getItemCount() ? $paginator->getItemCount() : ($paginator->page * 10)}</span>
 								of
-								<span class="font-medium">97</span>
+								<span class="font-medium">{$paginator->getItemCount()}</span>
 								results
 							</p>
 						</div>
