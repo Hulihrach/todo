@@ -25,7 +25,7 @@ class TodoListItemControl extends Control
 	public function render(TodoListItem $item): void
 	{
 		$this->template->item = $item;
-		$this->template->render(__DIR__ . '\\TodoListItemControl.latte');
+		$this->template->render(__DIR__ . DIRECTORY_SEPARATOR . 'TodoListItemControl.latte');
 	}
 
 	/**

@@ -48,6 +48,6 @@ class TodoListControl extends Control
 	public function render(TodoList $list): void
 	{
 		$this->template->list = $list;
-		$this->template->render(__DIR__ . '\\TodoListControl.latte');
+		$this->template->render(__DIR__ . DIRECTORY_SEPARATOR . 'TodoListControl.latte');
 	}
 }
