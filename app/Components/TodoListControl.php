@@ -33,7 +33,7 @@ class TodoListControl extends Control
 			$this->presenter->redirect('this');
 		}
 
-		if ($list->getUser() !== $this->presenter->getUser()->getId()) {
+		if ($list->getUser()->getId() !== $this->presenter->getUser()->getId()) {
 			$this->presenter->redirect('default');
 		}
 
