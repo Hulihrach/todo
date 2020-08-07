@@ -17,6 +17,18 @@ class TodoPresenter extends Presenter
 	/** @var TodoManager @inject */
 	public $todoManager;
 
+	/**
+	 * @throws AbortException
+	 */
+	public function startup(): void
+	{
+		parent::startup();
+
+		if (!$this->getUser()->isLoggedIn()) {
+			$this->redirect('Homepage:default');
+		}
+	}
+
 	public function renderDefault(int $page = 1): void
 	{
 		try {
